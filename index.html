@@ -111,8 +111,21 @@ nav a{
   text-decoration:none;
   color:var(--ink-soft);
   transition:color 0.3s;
+  position:relative;
+  padding-bottom:3px;
 }
-nav a:hover{color:var(--chrome-3);}
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0; bottom:0;
+  width:100%; height:1px;
+  background:var(--chrome-3);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform 0.4s ease;
+}
+nav a:hover{color:var(--ink);}
+nav a:hover::after{transform:scaleX(1); transform-origin:left;}
 
 /* -------- hero -------- */
 .hero{
@@ -124,11 +137,25 @@ nav a:hover{color:var(--chrome-3);}
   text-align:center;
   padding:120px 24px 80px;
   position:relative;
-  background:
-    linear-gradient(180deg, rgba(24,23,21,0.35) 0%, rgba(24,23,21,0.55) 55%, rgba(20,19,17,0.75) 100%),
-    url('photos/hero-pier-kiss-bw.jpg');
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;
+  inset:-30px;
+  background:url('photos/hero-pier-kiss-bw.jpg');
   background-size:cover;
   background-position:center 62%;
+  animation:heroZoom 26s ease-in-out infinite alternate;
+  will-change:transform;
+}
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(24,23,21,0.35) 0%, rgba(24,23,21,0.55) 55%, rgba(20,19,17,0.75) 100%);
+}
+@keyframes heroZoom{
+  0%{transform:scale(1) translateY(0);}
+  100%{transform:scale(1.09) translateY(-18px);}
 }
 .hero, .hero-eyebrow, .hero-sub, .hero-scroll{color:var(--chrome-1);}
 .hero-eyebrow, .hero-sub, .hero-scroll{color:#ffffff;}
@@ -141,7 +168,9 @@ nav a:hover{color:var(--chrome-3);}
     repeating-linear-gradient(90deg, rgba(42,38,32,0.03) 0px, transparent 1px, transparent 3px),
     repeating-linear-gradient(0deg, rgba(42,38,32,0.025) 0px, transparent 1px, transparent 3px);
   pointer-events:none;
+  z-index:1;
 }
+.hero-eyebrow, .hero h1, .hero-sub, .hero-scroll{position:relative; z-index:2;}
 .hero-eyebrow{
   animation:fadeUp 1.1s ease both;
 }
@@ -221,6 +250,14 @@ section{padding:110px 0;}
   transition:opacity 0.9s ease, transform 0.9s ease;
 }
 .reveal.in{opacity:1; transform:translateY(0);}
+
+.photo-reveal{overflow:hidden;}
+.photo-reveal img{
+  transform:scale(1.12);
+  opacity:0;
+  transition:transform 1.4s cubic-bezier(.16,.84,.44,1), opacity 1s ease;
+}
+.photo-reveal.in img{transform:scale(1); opacity:1;}
 
 /* -------- story -------- */
 .story-grid{
@@ -387,42 +424,6 @@ section{padding:110px 0;}
 }
 .venue-note-text p:last-child{margin-bottom:0;}
 
-/* -------- itinerary list -------- */
-.itin{
-  max-width:640px;
-  margin:0 auto;
-}
-.itin-row{
-  display:grid;
-  grid-template-columns:110px 1fr;
-  gap:24px;
-  padding:20px 0;
-  border-bottom:1px solid var(--hair);
-}
-.itin-row:last-child{border-bottom:none;}
-.itin-time{
-  font-family:'Jost', sans-serif;
-  font-size:12px;
-  letter-spacing:0.14em;
-  color:var(--chrome-3);
-  padding-top:3px;
-}
-.itin-what b{font-weight:500;}
-.itin-what span{
-  display:block;
-  color:var(--silver);
-  font-size:14px;
-  font-family:'Jost', sans-serif;
-  letter-spacing:0.02em;
-  margin-top:3px;
-}
-.itin-day-label{
-  font-style:italic;
-  font-size:22px;
-  margin:56px 0 8px;
-}
-.itin-day-label:first-child{margin-top:0;}
-
 /* -------- travel / stay -------- */
 .stay{
   display:grid;
@@ -489,10 +490,10 @@ section{padding:110px 0;}
   width:100%; height:100%;
   object-fit:cover;
   display:block;
-  transition:transform 0.6s ease, filter 0.6s ease;
+  transition:transform 1.1s cubic-bezier(.16,.84,.44,1), filter 0.6s ease;
   filter:grayscale(0.1) contrast(1.02);
 }
-.g-item:hover img{transform:scale(1.045);}
+.g-item:hover img{transform:scale(1.07);}
 .g-item::after{
   content:"";
   position:absolute; inset:0;
@@ -527,6 +528,55 @@ section{padding:110px 0;}
   letter-spacing:0.04em;
   color:var(--silver);
   margin-bottom:0;
+}
+
+/* -------- extend the trip -------- */
+.extend-intro{
+  max-width:560px;
+  margin:0 auto 56px;
+  text-align:center;
+  font-size:18px;
+  color:var(--ink-soft);
+}
+.routes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--hair);
+  border:1px solid var(--hair);
+}
+.route-card{
+  background:var(--bone);
+  padding:44px 40px;
+}
+.route-card .dl{
+  font-family:'Jost', sans-serif;
+  font-size:10px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--chrome-3);
+  margin-bottom:10px;
+}
+.route-card h3{
+  font-size:28px;
+  font-style:italic;
+  font-weight:400;
+  margin-bottom:18px;
+}
+.route-path{
+  font-family:'Jost', sans-serif;
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:var(--ink-soft);
+  line-height:1.9;
+  padding-bottom:20px;
+  margin-bottom:20px;
+  border-bottom:1px solid var(--hair);
+}
+.route-path span{color:var(--silver); margin:0 2px;}
+.route-card p{
+  font-size:16px;
+  color:var(--ink-soft);
 }
 
 /* -------- registry -------- */
@@ -580,6 +630,7 @@ footer .fine{
   .stay-image{aspect-ratio:16/10;}
   .story-grid{grid-template-columns:1fr; gap:36px;}
   .venue-note{grid-template-columns:1fr; gap:28px; margin-top:48px;}
+  .routes{grid-template-columns:1fr;}
   .gallery{grid-template-columns:repeat(2,1fr);}
   nav{gap:20px; flex-wrap:wrap;}
 }
@@ -603,15 +654,17 @@ footer .fine{
 
 <nav id="nav">
   <a href="#weekend">The Weekend</a>
-  <a href="#itinerary">Itinerary</a>
   <a href="#stay">Stay</a>
   <a href="#gallery">Gallery</a>
   <a href="#rsvp">RSVP</a>
   <a href="#registry">Registry</a>
+  <a href="#extend">Extend the Trip</a>
   <a href="#story">Story</a>
 </nav>
 
 <section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-eyebrow label">The Wedding of</div>
   <h1 class="script">Simone <span class="amp">&amp;</span> Kyle</h1>
   <div class="hero-sub">June 18 – 20, 2027 <span>·</span> Palace Natali <span>·</span> Dubrovnik, Croatia</div>
@@ -666,7 +719,7 @@ footer .fine{
     </div>
 
     <div class="venue-note">
-      <div class="venue-note-photo">
+      <div class="venue-note-photo photo-reveal">
         <img src="photos/lazareti-aerial.jpg" alt="Lazareti, Dubrovnik">
       </div>
       <div class="venue-note-text">
@@ -676,59 +729,9 @@ footer .fine{
         <p>These days it's a cultural venue instead of a checkpoint, which is where we come in, hors d'oeuvres in hand, for the first night of the weekend.</p>
       </div>
     </div>
-  </section>
-
-  <div class="lace">
-    <svg viewBox="0 0 220 20"><path d="M0,10 Q55,0 110,10 T220,10"/><circle cx="10" cy="10" r="1.6"/><circle cx="42" cy="6" r="1.6"/><circle cx="74" cy="12" r="1.6"/><circle cx="110" cy="10" r="1.6"/><circle cx="146" cy="12" r="1.6"/><circle cx="178" cy="6" r="1.6"/><circle cx="210" cy="10" r="1.6"/></svg>
-  </div>
-
-  <section id="itinerary" class="reveal">
-    <div class="section-head">
-      <span class="label">A Loose Guide</span>
-      <h2 class="display">Recommended Itinerary</h2>
-    </div>
-    <div class="itin">
-      <div class="itin-day-label display">Friday</div>
-      <div class="itin-row">
-        <div class="itin-time">3:00 PM</div>
-        <div class="itin-what"><b>Check-in opens</b><span>Palace Natali, settle in, find your room, wander the gardens</span></div>
-      </div>
-      <div class="itin-row">
-        <div class="itin-time">7:00 PM</div>
-        <div class="itin-what"><b>Welcome dinner</b><span>[Location], an easy first night together</span></div>
-      </div>
-
-      <div class="itin-day-label display">Saturday</div>
-      <div class="itin-row">
-        <div class="itin-time">10:00 AM</div>
-        <div class="itin-what"><b>Free morning</b><span>Old Town Dubrovnik is a short walk, or stay poolside</span></div>
-      </div>
-      <div class="itin-row">
-        <div class="itin-time">5:00 PM</div>
-        <div class="itin-what"><b>Ceremony</b><span>The Renaissance gardens</span></div>
-      </div>
-      <div class="itin-row">
-        <div class="itin-time">6:30 PM</div>
-        <div class="itin-what"><b>Cocktail hour</b><span>Terrace, as the light goes gold</span></div>
-      </div>
-      <div class="itin-row">
-        <div class="itin-time">8:00 PM</div>
-        <div class="itin-what"><b>Reception &amp; dinner</b><span>[Location], dancing until 1 AM</span></div>
-      </div>
-
-      <div class="itin-day-label display">Sunday</div>
-      <div class="itin-row">
-        <div class="itin-time">11:30 AM</div>
-        <div class="itin-what"><b>Boat departs</b><span>BOWA Dubrovnik, out to a secluded island. Optional, but come if you can</span></div>
-      </div>
-      <div class="itin-row">
-        <div class="itin-time">All afternoon</div>
-        <div class="itin-what"><b>Swim, eat, soak up the sun</b><span>Catch of the day, one last stretch together before goodbyes</span></div>
-      </div>
-    </div>
 
     <div class="venue-note">
-      <div class="venue-note-photo">
+      <div class="venue-note-photo photo-reveal">
         <img src="photos/bowa-dubrovnik.jpg" alt="BOWA Dubrovnik">
       </div>
       <div class="venue-note-text">
@@ -750,7 +753,7 @@ footer .fine{
       <h2 class="display">Palace Natali</h2>
     </div>
     <div class="stay">
-      <div class="stay-image"><img src="photos/palace-natali-aerial.jpg" alt="Palace Natali, Dubrovnik"></div>
+      <div class="stay-image photo-reveal"><img src="photos/palace-natali-aerial.jpg" alt="Palace Natali, Dubrovnik"></div>
       <div>
         <h3 class="display">All of it, just for us</h3>
         <p>We've reserved Palace Natali privately for the full weekend: all 21 rooms, plus several surrounding villas, so that everyone we love is a short walk from everyone else.</p>
@@ -822,13 +825,39 @@ footer .fine{
     <svg viewBox="0 0 220 20"><path d="M0,10 Q55,0 110,10 T220,10"/><circle cx="10" cy="10" r="1.6"/><circle cx="42" cy="6" r="1.6"/><circle cx="74" cy="12" r="1.6"/><circle cx="110" cy="10" r="1.6"/><circle cx="146" cy="12" r="1.6"/><circle cx="178" cy="6" r="1.6"/><circle cx="210" cy="10" r="1.6"/></svg>
   </div>
 
+  <section id="extend" class="reveal">
+    <div class="section-head">
+      <span class="label">After We Say I Do</span>
+      <h2 class="display">Extend the Trip</h2>
+    </div>
+    <p class="extend-intro">Already making the trip to Croatia? Consider staying on. Here are two routes worth taking, either one makes a great week.</p>
+    <div class="routes">
+      <div class="route-card">
+        <div class="dl">Route One</div>
+        <h3 class="display">The Dalmatian Coast</h3>
+        <div class="route-path">Dubrovnik <span>→</span> Makarska Riviera <span>→</span> Brač <span>→</span> Šolta <span>→</span> Hvar <span>→</span> Vis <span>→</span> Split</div>
+        <p>Fly into Dubrovnik and spend a couple of days getting your bearings in the old city, then head up the coast to the Makarska Riviera. From there, island-hop through Brač, Šolta, Hvar, and Vis before flying home out of Split. This is the route we did ourselves, and we loved every stop of it.</p>
+      </div>
+      <div class="route-card">
+        <div class="dl">Route Two</div>
+        <h3 class="display">The Balkan Loop</h3>
+        <div class="route-path">Dubrovnik <span>→</span> Bosnia &amp; Herzegovina <span>→</span> Montenegro <span>→</span> Albania</div>
+        <p>Go the other direction: from Dubrovnik into Bosnia and Herzegovina, on to Montenegro, and, if you have the extra days, across the border into Albania, one of our favorite countries. Wilder, less traveled, and just as beautiful.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lace">
+    <svg viewBox="0 0 220 20"><path d="M0,10 Q55,0 110,10 T220,10"/><circle cx="10" cy="10" r="1.6"/><circle cx="42" cy="6" r="1.6"/><circle cx="74" cy="12" r="1.6"/><circle cx="110" cy="10" r="1.6"/><circle cx="146" cy="12" r="1.6"/><circle cx="178" cy="6" r="1.6"/><circle cx="210" cy="10" r="1.6"/></svg>
+  </div>
+
   <section id="story" class="reveal">
     <div class="section-head">
       <span class="label">Our Story</span>
       <h2 class="display">Two people, one long conversation</h2>
     </div>
     <div class="story-grid">
-      <div class="story-photo">
+      <div class="story-photo photo-reveal">
         <img src="photos/story-proposal.jpg" alt="The proposal, by the water">
       </div>
       <div class="story-text">
@@ -865,7 +894,7 @@ window.addEventListener('scroll', () => {
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
 }, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal, .photo-reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>
