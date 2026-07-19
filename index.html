@@ -325,104 +325,69 @@ section{padding:110px 0;}
   color:var(--ink-soft);
 }
 
-/* -------- weekend / days -------- */
-.days{
+/* -------- weekend flow (day + venue, fused) -------- */
+.weekend-flow{
+  display:flex;
+  flex-direction:column;
+  gap:96px;
+  max-width:1080px;
+  margin:0 auto;
+}
+.flow-day{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1px;
-  background:var(--hair);
-  border:1px solid var(--hair);
+  grid-template-columns:0.95fr 1.05fr;
+  gap:64px;
+  align-items:center;
 }
-.day{
-  background:var(--bone);
-  padding:48px 36px;
-  text-align:center;
-  transition:background 0.4s;
+.flow-day.reverse .flow-photo{order:2;}
+.flow-day.reverse .flow-text{order:1;}
+.flow-photo{
+  aspect-ratio:4/5;
+  overflow:hidden;
 }
-.day:hover{background:var(--bone-dim);}
-.day .num{
+.flow-photo img{
+  width:100%; height:100%;
+  object-fit:cover;
+  display:block;
+  filter:grayscale(0.2) contrast(1.02);
+}
+.flow-text .num{
   font-family:'Cormorant Garamond', serif;
   font-style:italic;
   font-size:15px;
   color:var(--chrome-3);
   display:block;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
-.day h3{
+.flow-text h3{
   font-size:30px;
   font-style:italic;
   font-weight:400;
   margin-bottom:6px;
 }
-.day .date{
+.flow-text .date{
   font-family:'Jost', sans-serif;
   font-size:11px;
   letter-spacing:0.2em;
   text-transform:uppercase;
   color:var(--silver);
-  margin-bottom:26px;
+  margin-bottom:24px;
   display:block;
 }
-.day-detail{
-  text-align:left;
-  border-top:1px solid var(--hair);
-  padding-top:20px;
+.flow-text .dl{
+  font-family:'Jost', sans-serif;
+  font-size:10px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--silver);
+  margin-bottom:6px;
   margin-top:20px;
 }
-.day-detail .dl{
-  font-family:'Jost', sans-serif;
-  font-size:10px;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--silver);
-  margin-bottom:4px;
-}
-.day-detail p{
+.flow-text .dl:first-of-type{margin-top:0;}
+.flow-text p{
   font-size:16px;
   color:var(--ink-soft);
-  margin-bottom:18px;
 }
-.day-detail p:last-child{margin-bottom:0;}
-
-/* -------- venue note (Lazareti) -------- */
-.venue-note{
-  display:grid;
-  grid-template-columns:0.9fr 1.1fr;
-  gap:56px;
-  align-items:center;
-  max-width:980px;
-  margin:72px auto 0;
-}
-.venue-note-photo{
-  aspect-ratio:3/4;
-  overflow:hidden;
-}
-.venue-note-photo img{
-  width:100%; height:100%;
-  object-fit:cover;
-  display:block;
-  filter:grayscale(0.25) contrast(1.02);
-}
-.venue-note-text .dl{
-  font-family:'Jost', sans-serif;
-  font-size:10px;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:var(--silver);
-  margin-bottom:10px;
-}
-.venue-note-text h3{
-  font-size:32px;
-  font-style:italic;
-  font-weight:400;
-  margin-bottom:16px;
-}
-.venue-note-text p{
-  font-size:16px;
-  color:var(--ink-soft);
-  margin-bottom:14px;
-}
-.venue-note-text p:last-child{margin-bottom:0;}
 
 /* -------- travel / stay -------- */
 .stay{
@@ -625,11 +590,13 @@ footer .fine{
 }
 
 @media (max-width:820px){
-  .days{grid-template-columns:1fr;}
   .stay{grid-template-columns:1fr;}
   .stay-image{aspect-ratio:16/10;}
   .story-grid{grid-template-columns:1fr; gap:36px;}
-  .venue-note{grid-template-columns:1fr; gap:28px; margin-top:48px;}
+  .weekend-flow{gap:56px;}
+  .flow-day, .flow-day.reverse{grid-template-columns:1fr; gap:24px;}
+  .flow-day.reverse .flow-photo{order:1;}
+  .flow-day.reverse .flow-text{order:2;}
   .routes{grid-template-columns:1fr;}
   .gallery{grid-template-columns:repeat(2,1fr);}
   nav{gap:20px; flex-wrap:wrap;}
@@ -682,63 +649,51 @@ footer .fine{
       <span class="label">June 18 – 20, 2027</span>
       <h2 class="display">The Weekend</h2>
     </div>
-    <div class="days">
-      <div class="day">
-        <span class="num">I</span>
-        <h3 class="display">Day One</h3>
-        <span class="date">Friday, June 18</span>
-        <div class="day-detail">
+
+    <div class="weekend-flow">
+      <div class="flow-day">
+        <div class="flow-photo photo-reveal">
+          <img src="photos/lazareti-aerial.jpg" alt="Lazareti, Dubrovnik">
+        </div>
+        <div class="flow-text">
+          <span class="num">I</span>
+          <h3 class="display">Day One · Lazareti</h3>
+          <span class="date">Friday, June 18</span>
           <div class="dl">Dress Code</div>
           <p>[e.g. Resort elegant: linen, light fabrics, low heels for garden paths]</p>
           <div class="dl">The Evening</div>
-          <p>Welcome party with hors d'oeuvres at Lazareti.</p>
+          <p>We open the weekend with a welcome party and hors d'oeuvres at Lazareti, just outside the old city walls near the Ploče Gate. Built in the 1600s as Dubrovnik's quarantine station, it's one of the best-preserved complexes of its kind in the Mediterranean: long stone halls and open courtyards looking straight out at the water. These days it's a cultural venue instead of a checkpoint, which is where we come in.</p>
         </div>
       </div>
-      <div class="day">
-        <span class="num">II</span>
-        <h3 class="display">Day Two</h3>
-        <span class="date">Saturday, June 19</span>
-        <div class="day-detail">
+
+      <div class="flow-day reverse">
+        <div class="flow-photo photo-reveal">
+          <img src="photos/palace-natali-aerial.jpg" alt="Palace Natali, Dubrovnik">
+        </div>
+        <div class="flow-text">
+          <span class="num">II</span>
+          <h3 class="display">Day Two · Palace Natali</h3>
+          <span class="date">Saturday, June 19</span>
           <div class="dl">Dress Code</div>
           <p>[e.g. Black tie optional: ceremony in the Renaissance gardens]</p>
           <div class="dl">The Day</div>
-          <p>We exchange vows, tell stories, and celebrate our marriage in the gardens at Palace Natali, with our favorite people, all in one place.</p>
+          <p>We exchange vows, tell stories, and celebrate our marriage in the gardens at Palace Natali, a 16th-century Renaissance estate we've reserved entirely for our weekend: stone courtyards, tiered gardens, and the Adriatic just below. Our favorite people, all in one place.</p>
         </div>
       </div>
-      <div class="day">
-        <span class="num">III</span>
-        <h3 class="display">Day Three</h3>
-        <span class="date">Sunday, June 20</span>
-        <div class="day-detail">
+
+      <div class="flow-day">
+        <div class="flow-photo photo-reveal">
+          <img src="photos/bowa-dubrovnik.jpg" alt="BOWA Dubrovnik">
+        </div>
+        <div class="flow-text">
+          <span class="num">III</span>
+          <h3 class="display">Day Three · BOWA Dubrovnik</h3>
+          <span class="date">Sunday, June 20</span>
           <div class="dl">Dress Code</div>
           <p>[e.g. Undone and easy: swimwear, linen, bare feet by the pool]</p>
           <div class="dl">The Day</div>
-          <p>Optional beach &amp; boat day at BOWA Dubrovnik. We set sail at 11:30 for a secluded island, where the plan is simple: swim in the Adriatic, eat the catch of the day, and soak up the sun together before saying goodbye.</p>
+          <p>An optional beach and boat day at BOWA Dubrovnik, an overwater lounge reached by boat: thatched cabanas and clear turquoise shallows. We set sail at 11:30 for a secluded island, where the plan is simple: swim in the Adriatic, eat the catch of the day, and soak up the sun together before saying goodbye.</p>
         </div>
-      </div>
-    </div>
-
-    <div class="venue-note">
-      <div class="venue-note-photo photo-reveal">
-        <img src="photos/lazareti-aerial.jpg" alt="Lazareti, Dubrovnik">
-      </div>
-      <div class="venue-note-text">
-        <div class="dl">Where We'll Be · Day One</div>
-        <h3 class="display">Lazareti</h3>
-        <p>Just outside the old city walls, where they meet the sea near the Ploče Gate, Lazareti was built in the 1600s as Dubrovnik's quarantine station: arriving sailors and merchants were held here in isolation before being allowed into the city. It's one of the best-preserved complexes of its kind anywhere in the Mediterranean: long stone halls and open courtyards built directly into the rock, looking straight out at the water.</p>
-        <p>These days it's a cultural venue instead of a checkpoint, which is where we come in, hors d'oeuvres in hand, for the first night of the weekend.</p>
-      </div>
-    </div>
-
-    <div class="venue-note">
-      <div class="venue-note-photo photo-reveal">
-        <img src="photos/bowa-dubrovnik.jpg" alt="BOWA Dubrovnik">
-      </div>
-      <div class="venue-note-text">
-        <div class="dl">Where We'll Be · Day Three</div>
-        <h3 class="display">BOWA Dubrovnik</h3>
-        <p>An overwater lounge on a quiet stretch of the Adriatic, reached by boat and built right out over the water: thatched cabanas, clear turquoise shallows, and not much else on the agenda.</p>
-        <p>Entirely optional, but it's the softest possible way to close out the weekend: swim, eat something fresh off the grill, and stay as long as the sun's out.</p>
       </div>
     </div>
   </section>
